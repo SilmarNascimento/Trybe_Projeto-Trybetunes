@@ -11,7 +11,6 @@ class AlbumCard extends Component {
       imgURL,
       trackCount,
     } = this.props;
-    console.log(collectionId);
     return (
       <li>
         <Link
@@ -33,7 +32,7 @@ export default AlbumCard;
 AlbumCard.propTypes = {
   artistName: PropTypes.string.isRequired,
   collectionName: PropTypes.string.isRequired,
-  collectionId: PropTypes.string.isRequired,
+  collectionId: PropTypes.number.isRequired,
   imgURL: PropTypes.string.isRequired,
   trackCount: PropTypes.number.isRequired,
 };

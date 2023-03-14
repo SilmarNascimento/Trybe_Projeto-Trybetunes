@@ -22,16 +22,18 @@ class Album extends Component {
         trackName,
         previewUrl,
         trackNumber,
+        trackId,
       } = music;
       return (
         <Musiccard
           key={ trackNumber }
           trackName={ trackName }
           previewUrl={ previewUrl }
+          trackId={ trackId }
         />
       );
     });
-    const renderAlbumCard = albumObj.map((music) => {
+    const renderAlbumCard = albumObj.map((music, index) => {
       const {
         collectionName,
         artworkUrl100: imgURL,
@@ -39,12 +41,12 @@ class Album extends Component {
         trackCount,
       } = music;
       return (
-        <>
+        <div key={ index }>
           <h3 data-testid="album-name">{ collectionName }</h3>
           <img src={ imgURL } alt={ collectionName } />
           <p data-testid="artist-name">{ artistName }</p>
           <p>{ trackCount }</p>
-        </>
+        </div>
       );
     });
     this.setState({
@@ -59,9 +61,7 @@ class Album extends Component {
       <div data-testid="page-album">
         <Header />
         <div>
-          <div>
-            { renderAlbumCard }
-          </div>
+          { renderAlbumCard }
           <div>
             { renderMusicCard }
           </div>
