@@ -8,14 +8,18 @@ import Profile from './pages/Profile';
 import ProfileEdit from './pages/ProfileEdit';
 import NotFound from './pages/NotFound';
 import { createUser } from './services/userAPI';
+import searchAlbumsAPI from './services/searchAlbumsAPI';
 
 class App extends React.Component {
   constructor() {
     super();
     this.state = {
       isLoading: false,
-      loginName: '',
       loggedIn: false,
+      loginName: '',
+      searchedInput: '',
+      searchArtistMusic: '',
+      albumCollection: [],
     };
   }
 
@@ -31,6 +35,21 @@ class App extends React.Component {
     });
   };
 
+  handleSearchAlbumMusic = async (event) => {
+    event.preventDefault();
+    const { searchArtistMusic } = this.state;
+    this.setState({
+      isLoading: true,
+    });
+    const albumObj = await searchAlbumsAPI(searchArtistMusic);
+    this.setState({
+      searchedInput: searchArtistMusic,
+      searchArtistMusic: '',
+      isLoading: false,
+      albumCollection: [...albumObj],
+    });
+  };
+
   handleChange = ({ target }) => {
     const { name, type } = target;
     const value = type === 'checkbox' ? target.checked : target.value;
@@ -40,8 +59,9 @@ class App extends React.Component {
   };
 
   render() {
-    const { isLoading, loginName, loggedIn } = this.state;
-    const { handleChange, handleSubmit } = this;
+    const { isLoading, loggedIn, loginName, searchArtistMusic } = this.state;
+    const { searchedInput, albumCollection } = this.state;
+    const { handleChange, handleSubmit, handleSearchAlbumMusic } = this;
     const loginProps = {
       isLoading,
       loginName,
@@ -55,8 +75,16 @@ class App extends React.Component {
     const profileEditProps = {
       isLoading,
     };
-    const AlbumProps = {
+    const albumProps = {
       isLoading,
+    };
+    const searchProps = {
+      isLoading,
+      searchedInput,
+      searchArtistMusic,
+      albumCollection,
+      handleChange,
+      handleSearchAlbumMusic,
     };
     return (
       <BrowserRouter>
@@ -71,11 +99,11 @@ class App extends React.Component {
           />
           <Route
             path="/album/:id"
-            render={ (props) => <Album { ...props } { ...AlbumProps } /> }
+            render={ (props) => <Album { ...props } { ...albumProps } /> }
           />
           <Route
             path="/search"
-            render={ () => <Search isLoading={ isLoading } /> }
+            render={ () => <Search { ...searchProps } /> }
           />
           <Route
             path="/favorites"
