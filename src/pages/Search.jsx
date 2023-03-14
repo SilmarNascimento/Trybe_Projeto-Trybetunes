@@ -2,7 +2,7 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import Header from '../components/Header';
 import Loading from '../components/Loagind';
-import MusicCard from '../components/MusicCard';
+import AlbumCard from '../components/AlbumCard';
 
 class Search extends Component {
   render() {
@@ -19,7 +19,7 @@ class Search extends Component {
         trackCount,
       } = album;
       return (
-        <MusicCard
+        <AlbumCard
           key={ collectionId }
           artistName={ artistName }
           collectionName={ collectionName }

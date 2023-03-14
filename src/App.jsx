@@ -77,6 +77,7 @@ class App extends React.Component {
     };
     const albumProps = {
       isLoading,
+      albumCollection,
     };
     const searchProps = {
       isLoading,
