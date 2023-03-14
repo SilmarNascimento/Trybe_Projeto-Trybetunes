@@ -13,19 +13,21 @@ class App extends React.Component {
   constructor() {
     super();
     this.state = {
-      isLoading: 'false',
+      isLoading: false,
       loginName: '',
+      loggedIn: false,
     };
   }
 
   handleSubmit = async () => {
     const { loginName } = this.state;
     this.setState({
-      isLoading: 'true',
+      isLoading: true,
     });
     await createUser({ name: loginName });
     this.setState({
-      isLoading: 'false',
+      isLoading: false,
+      loggedIn: true,
     });
   };
 
@@ -38,54 +40,51 @@ class App extends React.Component {
   };
 
   render() {
-    const { isLoading, loginName } = this.state;
+    const { isLoading, loginName, loggedIn } = this.state;
+    const { handleChange, handleSubmit } = this;
+    const loginProps = {
+      isLoading,
+      loginName,
+      loggedIn,
+      handleChange,
+      handleSubmit,
+    };
+    const profileProps = {
+      isLoading,
+    };
+    const profileEditProps = {
+      isLoading,
+    };
+    const AlbumProps = {
+      isLoading,
+    };
     return (
-      <div>
-        <p>
-          TrybeTunes
-        </p>
-        <BrowserRouter>
-          <Switch>
-            <Route
-              path="/profile/edit"
-              render={ (props) => { <ProfileEdit { ...props } />; } }
-            />
-            <Route
-              path="/profile"
-              render={ (props) => { <Profile { ...props } />; } }
-            />
-            <Route
-              path="/album/:id"
-              render={ (props) => { <Album { ...props } />; } }
-            />
-            <Route
-              path="/search"
-              render={ (props) => { <Search { ...props } />; } }
-            />
-            <Route
-              path="/favorites"
-              render={ (props) => { <Favorites { ...props } />; } }
-            />
-            <Route
-              exact
-              path="/"
-              render={ (props) => {
-                <Login
-                  { ...props }
-                  loading={ isLoading }
-                  loginName={ loginName }
-                  handleClick={ this.handleChange }
-                  handleSubmit={ this.handleSubmit }
-                />;
-              } }
-            />
-            <Route
-              path="*"
-              render={ (props) => { <NotFound { ...props } />; } }
-            />
-          </Switch>
-        </BrowserRouter>
-      </div>
+      <BrowserRouter>
+        <Switch>
+          <Route
+            path="/profile/edit"
+            render={ () => <ProfileEdit { ...profileEditProps } /> }
+          />
+          <Route
+            path="/profile"
+            render={ () => <Profile { ...profileProps } /> }
+          />
+          <Route
+            path="/album/:id"
+            render={ (props) => <Album { ...props } { ...AlbumProps } /> }
+          />
+          <Route
+            path="/search"
+            render={ () => <Search isLoading={ isLoading } /> }
+          />
+          <Route
+            path="/favorites"
+            render={ () => <Favorites isLoading={ isLoading } /> }
+          />
+          <Route exact path="/" render={ () => <Login { ...loginProps } /> } />
+          <Route path="*" component={ NotFound } />
+        </Switch>
+      </BrowserRouter>
     );
   }
 }
