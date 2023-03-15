@@ -10,7 +10,7 @@ class Album extends Component {
   constructor() {
     super();
     this.state = {
-      albumInfo: [],
+      albumInfo: {},
       musicArray: [],
       isLoading: false,
       favoriteSongList: [],
@@ -20,8 +20,7 @@ class Album extends Component {
   async componentDidMount() {
     await this.getfavoriteSongList();
     const { match: { params: { id } } } = this.props;
-    const musicArray = await getMusics(id);
-    const albumObj = musicArray.splice(0, 1);
+    const [albumObj, ...musicArray] = await getMusics(id);
     this.setState({
       albumInfo: albumObj,
       musicArray,
@@ -79,22 +78,14 @@ class Album extends Component {
       );
     });
 
-    const renderAlbumCard = albumInfo.map((music, index) => {
-      const {
-        collectionName,
-        artworkUrl100: imgURL,
-        artistName,
-        trackCount,
-      } = music;
-      return (
-        <div key={ index }>
-          <h3 data-testid="album-name">{ collectionName }</h3>
-          <img src={ imgURL } alt={ collectionName } />
-          <p data-testid="artist-name">{ artistName }</p>
-          <p>{ trackCount }</p>
-        </div>
-      );
-    });
+    const renderAlbumCard = (
+      <div>
+        <h3 data-testid="album-name">{ albumInfo.collectionName }</h3>
+        <img src={ albumInfo.artworkUrl100 } alt={ albumInfo.collectionName } />
+        <p data-testid="artist-name">{ albumInfo.artistName }</p>
+        <p>{ albumInfo.trackCount }</p>
+      </div>
+    );
 
     const renderAlbumMusic = (
       <>
