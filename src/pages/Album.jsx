@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import Header from '../components/Header';
-import Musiccard from '../components/MusicCard';
+import MusicCard from '../components/MusicCard';
 import getMusics from '../services/musicsAPI';
 import Loading from '../components/Loagind';
 import { addSong, getFavoriteSongs, removeSong } from '../services/favoriteSongsAPI';
@@ -10,27 +10,76 @@ class Album extends Component {
   constructor() {
     super();
     this.state = {
-      renderAlbumCard: [],
-      renderMusicCard: [],
+      albumInfo: [],
+      musicArray: [],
       isLoading: false,
+      favoriteSongList: [],
     };
   }
 
   async componentDidMount() {
+    await this.getfavoriteSongList();
     const { match: { params: { id } } } = this.props;
     const musicArray = await getMusics(id);
     const albumObj = musicArray.splice(0, 1);
+    this.setState({
+      albumInfo: albumObj,
+      musicArray,
+    });
+  }
+
+  // recupera a lista de musicas favoritas e salva no estado do componente
+  getfavoriteSongList = async () => {
+    this.setState({
+      isLoading: true,
+    });
+    const favoriteSongList = await getFavoriteSongs();
+    this.setState({
+      favoriteSongList,
+      isLoading: false,
+    });
+  };
+
+  handleFavorite = async (objMusic) => {
+    const { favoriteSongList } = this.state;
+    if (favoriteSongList.some((favSong) => favSong.trackId === objMusic.trackId)) {
+      this.setState({
+        isLoading: true,
+      });
+      console.log('remove lista do favorito');
+      await removeSong(objMusic);
+      this.setState({
+        isLoading: false,
+      });
+    } else {
+      this.setState({
+        isLoading: true,
+      });
+      console.log('adiciona a musica nos favoritos');
+      await addSong(objMusic);
+      this.setState({
+        isLoading: false,
+      });
+    }
+    await this.getfavoriteSongList();
+  };
+
+  render() {
+    const { albumInfo, musicArray, favoriteSongList, isLoading } = this.state;
     const renderMusicCard = musicArray.map((music) => {
       const { trackNumber } = music;
+      const isFavorite = favoriteSongList.some((Song) => Song.trackId === music.trackId);
       return (
-        <Musiccard
+        <MusicCard
           key={ trackNumber }
-          handleFavorite={ this.handleFavorite }
           music={ music }
+          isFavorite={ isFavorite }
+          handleFavorite={ this.handleFavorite }
         />
       );
     });
-    const renderAlbumCard = albumObj.map((music, index) => {
+
+    const renderAlbumCard = albumInfo.map((music, index) => {
       const {
         collectionName,
         artworkUrl100: imgURL,
@@ -46,45 +95,14 @@ class Album extends Component {
         </div>
       );
     });
-    this.setState({
-      renderAlbumCard,
-      renderMusicCard,
-    });
-  }
 
-  handleFavorite = async () => {
-    const favoriteSongs = await getFavoriteSongs();
-    console.log(this.state);
-    const { music: song } = this.props;
-    console.log(song);
-    if (favoriteSongs.some((favSong) => favSong.trackId === song.trackId)) {
-      this.setState({
-        isLoading: true,
-      });
-      await removeSong(song);
-      this.setState({
-        isLoading: false,
-      });
-    } else {
-      this.setState({
-        isLoading: true,
-      });
-      await addSong(song);
-      this.setState({
-        isLoading: false,
-      });
-    }
-  };
-
-  render() {
-    const { renderAlbumCard, renderMusicCard, isLoading } = this.state;
     const renderAlbumMusic = (
-      <div>
+      <>
         { renderAlbumCard }
         <div>
           { renderMusicCard }
         </div>
-      </div>
+      </>
     );
     return (
       <div data-testid="page-album">

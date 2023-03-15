@@ -1,29 +1,11 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { getFavoriteSongs } from '../services/favoriteSongsAPI';
 
 class Musiccard extends Component {
-  constructor() {
-    super();
-    this.state = {
-      isFavorite: false,
-    };
-  }
-
-  async componentDidMount() {
-    const { music } = this.props;
-    const { trackId } = music;
-    const favoriteSongs = await getFavoriteSongs();
-    if (favoriteSongs.some((song) => song.trackId === trackId)) {
-      this.setState({ isFavorite: true });
-    }
-  }
-
   render() {
-    const { music } = this.props;
+    const { music, isFavorite } = this.props;
     const { trackName, previewUrl, trackId } = music;
     const { handleFavorite } = this.props;
-    const { isFavorite } = this.state;
     return (
       <>
         <p>{ trackName }</p>
@@ -32,14 +14,14 @@ class Musiccard extends Component {
           O seu navegador não suporta o elemento audio
           <code>audio</code>
         </audio>
-        <label htmlFor="favoriteSong">
+        <label htmlFor={ trackId }>
           Favorita
           <input
             type="checkbox"
-            name="favoriteSong"
-            id="favoriteSong"
+            name={ trackId }
+            id={ trackId }
             checked={ isFavorite }
-            onChange={ handleFavorite }
+            onChange={ () => handleFavorite(music) }
             data-testid={ `checkbox-music-${trackId}` }
           />
         </label>
@@ -56,5 +38,6 @@ Musiccard.propTypes = {
     previewUrl: PropTypes.string.isRequired,
     trackId: PropTypes.number.isRequired,
   }).isRequired,
+  isFavorite: PropTypes.bool.isRequired,
   handleFavorite: PropTypes.func.isRequired,
 };
