@@ -78,7 +78,7 @@ class App extends React.Component {
       isLoading,
     };
     const profileEditProps = {
-      isLoading,
+      handleChange,
     };
     const albumProps = {
       isLoading,
