@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import Header from '../components/Header';
-import Loading from '../components/Loagind';
+import Loading from '../components/Loadind';
 import AlbumCard from '../components/AlbumCard';
 
 class Search extends Component {

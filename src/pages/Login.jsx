@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
-import Loading from '../components/Loagind';
+import Loading from '../components/Loadind';
 
 class Login extends Component {
   render() {

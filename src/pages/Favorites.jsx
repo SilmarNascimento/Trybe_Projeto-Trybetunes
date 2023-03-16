@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import Header from '../components/Header';
 import { getFavoriteSongs, removeSong } from '../services/favoriteSongsAPI';
-import Loading from '../components/Loagind';
+import Loading from '../components/Loadind';
 import Musiccard from '../components/MusicCard';
 
 class Favorites extends Component {
@@ -34,13 +34,11 @@ class Favorites extends Component {
       this.setState({
         isLoading: true,
       });
-      console.log('remove lista do favorito');
       await removeSong(objMusic);
       this.setState({
         isLoading: false,
       });
     }
-    console.log('realmente removi');
     await this.getfavoriteSongList();
   };
 
