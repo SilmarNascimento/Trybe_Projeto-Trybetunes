@@ -61,7 +61,12 @@ class App extends React.Component {
   render() {
     const { isLoading, loggedIn, loginName, searchArtistMusic } = this.state;
     const { searchedInput, albumCollection } = this.state;
-    const { handleChange, handleSubmit, handleSearchAlbumMusic } = this;
+    const {
+      handleChange,
+      handleSubmit,
+      handleSearchAlbumMusic,
+    } = this;
+
     const loginProps = {
       isLoading,
       loginName,
@@ -86,6 +91,9 @@ class App extends React.Component {
       handleChange,
       handleSearchAlbumMusic,
     };
+    const favoriteProps = {
+      isLoading,
+    };
     return (
       <BrowserRouter>
         <Switch>
@@ -107,7 +115,7 @@ class App extends React.Component {
           />
           <Route
             path="/favorites"
-            render={ () => <Favorites isLoading={ isLoading } /> }
+            render={ () => <Favorites { ...favoriteProps } /> }
           />
           <Route exact path="/" render={ () => <Login { ...loginProps } /> } />
           <Route path="*" component={ NotFound } />
