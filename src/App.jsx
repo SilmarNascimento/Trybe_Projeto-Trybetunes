@@ -77,9 +77,6 @@ class App extends React.Component {
     const profileProps = {
       isLoading,
     };
-    const profileEditProps = {
-      handleChange,
-    };
     const albumProps = {
       isLoading,
     };
@@ -99,7 +96,7 @@ class App extends React.Component {
         <Switch>
           <Route
             path="/profile/edit"
-            render={ () => <ProfileEdit { ...profileEditProps } /> }
+            render={ (props) => <ProfileEdit { ...props } /> }
           />
           <Route
             path="/profile"

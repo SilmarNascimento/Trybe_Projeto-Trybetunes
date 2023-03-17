@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import PropTypes from 'prop-types';
 import Header from '../components/Header';
 import Loading from '../components/Loadind';
 import { getUser, updateUser } from '../services/userAPI';
@@ -31,6 +32,7 @@ class ProfileEdit extends Component {
 
   handleUpdate = async () => {
     const { editName, editEmail, editImage, editDescription } = this.state;
+    const { history } = this.props;
     const userUpdated = {
       name: editName,
       email: editEmail,
@@ -48,6 +50,7 @@ class ProfileEdit extends Component {
       editImage,
       editDescription,
     });
+    history.push('/profile');
   };
 
   handleChange = ({ target }) => {
@@ -130,3 +133,9 @@ class ProfileEdit extends Component {
 }
 
 export default ProfileEdit;
+
+ProfileEdit.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
+};
