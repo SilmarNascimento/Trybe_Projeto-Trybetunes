@@ -45,7 +45,6 @@ class Album extends Component {
       this.setState({
         isLoading: true,
       });
-      console.log('remove lista do favorito');
       await removeSong(objMusic);
       this.setState({
         isLoading: false,
@@ -54,7 +53,6 @@ class Album extends Component {
       this.setState({
         isLoading: true,
       });
-      console.log('adiciona a musica nos favoritos');
       await addSong(objMusic);
       this.setState({
         isLoading: false,
@@ -66,11 +64,11 @@ class Album extends Component {
   render() {
     const { albumInfo, musicArray, favoriteSongList, isLoading } = this.state;
     const renderMusicCard = musicArray.map((music) => {
-      const { trackNumber } = music;
+      const { trackId } = music;
       const isFavorite = favoriteSongList.some((Song) => Song.trackId === music.trackId);
       return (
         <MusicCard
-          key={ trackNumber }
+          key={ trackId }
           music={ music }
           isFavorite={ isFavorite }
           handleFavorite={ this.handleFavorite }

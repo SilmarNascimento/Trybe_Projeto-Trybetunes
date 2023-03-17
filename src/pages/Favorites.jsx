@@ -47,11 +47,11 @@ class Favorites extends Component {
     const { handleRemoveFavorite } = this;
     const renderFavorite = (
       favoriteSongList.map((song) => {
-        const { trackNumber } = song;
-        const isFav = favoriteSongList.some((msc) => msc.trackNumber === trackNumber);
+        const { trackId } = song;
+        const isFav = favoriteSongList.some((msc) => msc.trackId === trackId);
         return (
           <Musiccard
-            key={ trackNumber }
+            key={ trackId }
             music={ song }
             isFavorite={ isFav }
             favoriteSongList={ favoriteSongList }
